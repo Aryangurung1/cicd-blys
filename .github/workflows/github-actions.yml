@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - CICD/**
-      - .github/workflows/deploy.yml
+      - .github/workflows/github-actions.yml
   workflow_dispatch:
 
 permissions:

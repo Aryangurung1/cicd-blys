@@ -53,6 +53,8 @@ The second job:
 - also tags it as `latest`
 - pushes both tags to ECR
 
+One small detail matters here: I use `BUILD_CONTEXT` as the custom variable name for the Docker build path. I avoid `DOCKER_CONTEXT` because Docker already treats that as a special environment variable for Docker contexts.
+
 Using the commit SHA gives a clean release trail and makes rollbacks easier than relying only on `latest`.
 
 ### Deploy to ECS

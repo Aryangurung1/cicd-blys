@@ -23,7 +23,7 @@ env:
   ECS_SERVICE: ${{ vars.ECS_SERVICE }}
   ECS_TASK_FAMILY: ${{ vars.ECS_TASK_FAMILY }}
   CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
-  DOCKER_CONTEXT: ./CICD
+  BUILD_CONTEXT: ./CICD
   DOCKERFILE_PATH: ./CICD/Dockerfile
 
 jobs:
@@ -71,7 +71,7 @@ jobs:
             --file "$DOCKERFILE_PATH" \
             --tag "$IMAGE_URI" \
             --tag "$ECR_REGISTRY/$ECR_REPOSITORY:latest" \
-            "$DOCKER_CONTEXT"
+            "$BUILD_CONTEXT"
           docker push "$IMAGE_URI"
           docker push "$ECR_REGISTRY/$ECR_REPOSITORY:latest"
           echo "image_uri=$IMAGE_URI" >> "$GITHUB_OUTPUT"

@@ -23,8 +23,8 @@ env:
   ECS_SERVICE: ${{ vars.ECS_SERVICE }}
   ECS_TASK_FAMILY: ${{ vars.ECS_TASK_FAMILY }}
   CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
-  BUILD_CONTEXT: ./CICD
-  DOCKERFILE_PATH: ./CICD/Dockerfile
+  BUILD_CONTEXT: .
+  DOCKERFILE_PATH: ./Dockerfile
 
 jobs:
   quality_gate:

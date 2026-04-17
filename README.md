@@ -3,6 +3,7 @@
 This folder contains the CI/CD deliverables requested in the challenge:
 
 - a `Dockerfile`
+- a index.html
 - a pipeline configuration file
 
 The pipeline is written for GitHub Actions and is designed to deploy the container into the ECS Fargate infrastructure created by the Terraform stack.
@@ -34,8 +35,6 @@ The first job is intentionally reserved for checks that should happen before a p
 
 Typical checks I would add here:
 
-- unit tests
-- integration tests
 - Dockerfile linting with Hadolint
 - container scanning with Trivy
 - static analysis with Semgrep
@@ -47,13 +46,11 @@ The second job:
 - checks out the repository
 - authenticates to AWS using GitHub Secrets
 - logs in to Amazon ECR
-- builds the Docker image from `CICD/Dockerfile`
-- copies the application page from `CICD/index.html`
+- builds the Docker image from the repository `Dockerfile`
+- copies the application page from `index.html`
 - tags it with the Git commit SHA
 - also tags it as `latest`
 - pushes both tags to ECR
-
-One small detail matters here: I use `BUILD_CONTEXT` as the custom variable name for the Docker build path. I avoid `DOCKER_CONTEXT` because Docker already treats that as a special environment variable for Docker contexts.
 
 Using the commit SHA gives a clean release trail and makes rollbacks easier than relying only on `latest`.
 
@@ -80,7 +77,7 @@ Yes, GitHub Secrets should be used here.
 
 These are sensitive and should never be hardcoded in the workflow.
 
-### Recommended GitHub Repository Variables
+### GitHub Repository Variables
 
 - `AWS_REGION`
 - `ECR_REPOSITORY`
@@ -107,17 +104,6 @@ You will still need to create an ECR repository and set:
 
 or whatever repository name you choose in AWS.
 
-## Why This Is a Strong Submission
-
-This pipeline is intentionally simple, but it still shows production thinking:
-
-- separate validation, build, and deploy stages
-- immutable tagging with commit SHA
-- no hardcoded AWS credentials
-- deployment through ECS task definition revisioning
-- wait-for-stability before marking the release successful
-- clear handoff between infrastructure provisioning and application delivery
-
 ## How to Use It in a Real Repository
 
 GitHub Actions only runs workflows from `.github/workflows/`.
@@ -130,12 +116,11 @@ To use this pipeline in practice:
 4. create the Amazon ECR repository
 5. push to `main` or trigger the workflow manually
 
-## Recommended Next Improvements
+## Improvements
 
 If this pipeline were extended beyond the challenge, the next upgrades I would make are:
 
 - replace static AWS keys with GitHub OIDC and an IAM role
 - add real tests and Dockerfile linting in the quality gate
 - add image vulnerability scanning as an enforced gate
-- add production approval for protected deployments
 - add deployment notifications and rollback guidance
